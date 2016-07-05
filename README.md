@@ -6,9 +6,9 @@ Codeigniter startup project
 - Composer
 
 #Support
-- MY_Model CRUD query (like Eloquent in Laravel)
+- MY_Model CRUD query (like Eloquent in Laravel). For more document see : https://github.com/avenirer/CodeIgniter-MY_Model
 - Admin CMS with basic authen, basic role. Front base on Bootstrap AdminLTE2
-- Codeigniter-CLI of @kenjii
+- Codeigniter-CLI of @kenjis. For document see : https://github.com/kenjis/codeigniter-cli
 - Auto-generate code with `$ php cli cms create table_name` (this command will generate admin controller and client controller and views file)
 
 #Setup
