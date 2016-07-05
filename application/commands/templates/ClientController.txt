@@ -1,0 +1,31 @@
+<?php
+use Solid\Repositories\@@Classname@@Repository;
+use Solid\Collections\@@Classname@@;
+
+/**
+ * Created by ICOM-CMS
+ * User: kiendt
+ * From cms cli
+ * Class @@Classname@@Controller
+ * @property @@Classname@@_model $@@classname@@Model
+ */
+class @@Classname@@Controller extends MY_Controller
+{
+	/**
+     * @var @@Classname@@Repository $@@classname@@Repository
+     */
+    private $@@classname@@Repository;
+
+	public function __construct(@@Classname@@Repository $@@classname@@Repository)
+	{
+		parent::__construct();
+		//load model
+        $this->load->model('@@Classname@@_model','@@classname@@Model');
+
+        //dependencies injection
+        $this->@@classname@@Repository = $@@classname@@Repository;
+        $this->@@classname@@Repository->setModel($this->@@classname@@Model);
+	}
+
+
+}

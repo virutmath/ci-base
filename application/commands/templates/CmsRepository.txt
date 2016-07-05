@@ -1,0 +1,140 @@
+<?php
+namespace Solid\Repositories;
+/**
+ * Author KienDT.
+ * Email: kiendt@i-com.vn
+ * Auto-generate by CMS Command
+ */
+use Solid\Collections\@@Classname@@;
+
+/**
+ * Class @@Classname@@Repository
+ * @package Solid\Repositories
+ * @property \MY_Model $model
+ */
+class @@Classname@@Repository extends BaseRepository
+{
+	public function save()
+	{
+		// TODO: Implement save() method.
+		$this->checkModel();
+	}
+
+	/**
+	 * @return @@Classname@@[]
+	 * @throws \Exception
+	 */
+	public function getAll()
+	{
+		// TODO: Implement getAll() method.
+		$this->checkModel();
+		$listRecord = $this->model->get_all();
+		$list = [];
+        foreach ($listRecord as $modelRecord){
+            $modelRecord = @@Classname@@::create($modelRecord);
+            $list[] = $modelRecord;
+        }
+        return $listRecord;
+	}
+
+	/**
+     * @param int $totalRecord
+     * @param int $page
+     * @param int $pageSize
+     * @param string $fields
+     * @param array $addWhere
+     * @param array $order
+     * @return @@Classname@@[]
+     * @throws \Exception
+     */
+    public function getList($totalRecord, $page, $pageSize, $fields = '*',$addWhere = [], $order = [])
+    {
+        //default order
+        $order = !empty($order) ? $order : [$this->model->primary_key=>'DESC'];
+        $this->checkModel();
+        $page = $page > 1 ? $page : 1;
+        $offset = (int)(($page - 1) * $pageSize);
+
+        $trustLimit = DataGenerate::generateTrustLimitData($totalRecord,$offset,$pageSize);
+        $offset = $trustLimit['offset'];
+        $pageSize = $trustLimit['pageSize'];
+
+        $list = [];
+        $listRecord = $this->model->fields($fields)
+            //->with_() function here
+            ->limit($pageSize, $offset)
+            ->where($addWhere)
+            ->order_by($order)
+            ->get_all();
+        if($listRecord) {
+            foreach ($listRecord as $record) {
+                $record = @@Classname@@::create($record);
+                $list[] = $record;
+            }
+        }
+        return $list;
+    }
+
+
+	/**
+     * @param $totalRecord
+     * @param $page
+     * @param $pageSize
+     * @param string $fields
+     * @param array $order
+     * @return @@Classname@@[]
+     */
+    public function getActiveList($totalRecord, $page, $pageSize, $fields = '*', $order = [])
+    {
+        $where = ['active'=>1];
+        return $this->getList($totalRecord, $page, $pageSize, $fields, $where, $order);
+    }
+
+	/**
+     * @param array $where
+     * @return int
+     * @throws \Exception
+     */
+    public function countAll($where = [])
+    {
+        $this->checkModel();
+        $query = $this->model->fields('*');
+        $query->where($where);
+        return $query->count();
+    }
+
+	/**
+	 * @param $id
+	 * @return @@Classname@@
+	 * @throws \Exception
+	 */
+	public function findById($id)
+	{
+		// TODO: Implement findById() method.
+		$this->checkModel();
+		$modelRecord = $this->model->get([$this->model->primary_key => $id]);
+		return $modelRecord ? @@Classname@@::create($modelRecord) : null;
+	}
+
+
+	/**
+     * @param array $data
+     * @return \str
+     * @throws \Exception
+     */
+    public function updateById($data)
+    {
+        $this->checkModel();
+        return $this->model->update($data, ['id' => $data['id']]);
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     * @throws \Exception
+     */
+    public function deleteById($id) {
+        $this->checkModel();
+        return $this->model->delete(['id'=>$id]);
+    }
+}

@@ -1,0 +1,57 @@
+@extends('admin.template')
+@section('breadcrumb')
+    <h1>
+        Danh sách
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-folder-o"></i> Dashboard</a></li>
+        <li class="active">Quản lý</li>
+    </ol>
+@stop
+@section('main')
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    {{$tableAdmin}}
+                </div><!-- /.box-body -->
+                <div class="box-footer">
+                    The footer of the box
+                </div><!-- box-footer -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+
+@stop
+
+@section('script')
+    <script>
+        var adminJs = new TableAdminJs();
+        $('.deleteRecord').click(function (e) {
+            e.preventDefault();
+            var recordId = $(this).data('id'),
+                    url = $(this).data('delete-url'),
+                    option = {
+                        url: url,
+                        data: {
+                            recordId: recordId
+                        }
+                    };
+            adminJs.deleteRecord(option, function (response) {
+                if(response.success) {
+                    $.alert(response.msg);
+                    $('#tableAdmin-tr-' + recordId).remove();
+                }
+            }, function (response) {
+                console.log(response);
+            })
+        });
+
+        $('.iCheck').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'icheckbox_minimal-blue',
+            increaseArea: '20%' // optional
+        });
+        $('.select2').select2();
+    </script>
+@stop

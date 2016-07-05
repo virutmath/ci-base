@@ -1,0 +1,130 @@
+<?php
+use Solid\Repositories\AdminUserRepository;
+use Solid\Repositories\AdminModuleRepository;
+use Solid\Repositories\@@Classname@@Repository;
+use Solid\Collections\@@Classname@@;
+use Solid\Builder\TableAdmin as TableAdmin;
+/**
+ * Created by ICOM-CMS
+ * User: kiendt
+ * From cms cli
+ * Class @@Classname@@Controller
+ * @property @@Classname@@_model $@@classname@@Model
+ */
+class @@Classname@@Controller extends AdminController
+{
+	/**
+	 * @var @@Classname@@Repository $@@classname@@Repository
+	 */
+	private $@@classname@@Repository;
+
+	protected $pageSize = 30;
+	protected $adminModule = '@@module@@';
+
+	public function __construct(AdminUserRepository $adminUserRepository,
+						AdminModuleRepository $adminModuleRepository,
+						@@Classname@@Repository $@@classname@@Repository)
+	{
+		parent::__construct($adminUserRepository, $adminModuleRepository);
+		//load model
+		$this->load->model('@@Classname@@_model','@@classname@@Model');
+
+        //dependencies injection
+		$this->@@classname@@Repository = $@@classname@@Repository;
+		$this->@@classname@@Repository->setModel($this->@@classname@@Model);
+	}
+
+
+	public function index()
+	{
+		//$allCat = $this->categoryRepository->getAllCategory(0);
+        //$this->dataView['list'] = $this->parseMultiLevelData($allCat);
+        //$listIcon = \Solid\Collections\Category::ICON;
+        $tableConfig = [
+            'module'=>$this->adminModule
+        ];
+        //$table = new TableAdmin($this->dataView['list'],$tableConfig);
+        $table = new TableAdmin([],$tableConfig);
+        $table->column('id','ID');
+        //$table->column('image','Ảnh trang chủ','image');
+        //$table->column('publicName','Tên danh mục');
+        //$table->columnDropdown('icon','Biểu tượng',$listIcon);
+        //$table->column('active','Kích hoạt','checkbox');
+        $table->column('id','Edit','edit');
+        $table->column('id','Delete','delete');
+
+        $this->dataView['tableAdmin'] = $table->render();
+        $this->blade->render('admin.@@folder@@.index',$this->dataView);
+	}
+
+	public function add()
+	{
+		$this->dataView['errors'] = $this->session->flashdata('errors');
+		$this->blade->render('admin.@@folder@@.add',$this->dataView);
+	}
+
+	public function postAdd()
+	{
+		$data = $this->getFormData();
+		if($data == FALSE) {
+			redirect(AdminModule::getAdminModuleAddUrl($this->adminModule, $id));
+			die();
+		}
+	}
+
+	public function edit($id)
+	{
+		$this->dataView['errors'] = $this->session->flashdata('errors');
+		$this->dataView['detail'] = $this->@@classname@@Repository->findById($id);
+		$this->blade->render('admin.@@folder@@.edit',$this->dataView);
+	}
+
+	public function postEdit()
+	{
+		$data = $this->getFormData();
+		if($data == FALSE) {
+			redirect(AdminModule::getAdminModuleEditUrl($this->adminModule, $id));
+			die();
+		}
+	}
+
+	public function ajaxDelete()
+	{
+		$this->checkPermission('delete');
+        $recordId = $this->input->post('recordId',TRUE);
+        //delete record
+        $result = $this->@@classname@@Repository->deleteById($recordId);
+        if($result) {
+            echo json_encode(['success'=>1,'msg'=>'Bạn đã xóa thành công']);
+            die();
+        }else{
+            set_status_header(400);
+            echo json_encode(['success'=>0,'msg'=>'Không thể thực hiện tác vụ này']);
+            die();
+        }
+	}
+
+	public function ajaxUpdate()
+	{
+		
+	}
+
+	/**
+	 * Get data from form
+	 * @return false|array data from post
+	 */
+	protected function getFormData()
+	{
+		//$this->form_validation->set_rules()
+
+		if($this->form_validation->run() == FALSE) {
+			$this->session->set_flashdata('errors', $this->form_validation->error_array());
+			return false;
+		}else{
+			$data = [
+
+			];
+			return $data;
+		}
+	}
+}

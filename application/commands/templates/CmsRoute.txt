@@ -1,0 +1,8 @@
+<?php
+$route['admin/@@module@@'] = 'admin/@@Classname@@Controller';
+$route['admin/@@module@@/add']['get'] = 'admin/@@Classname@@Controller/add';
+$route['admin/@@module@@/add']['post'] = 'admin/@@Classname@@Controller/postAdd';
+$route['admin/@@module@@/edit/(:num)']['get'] = 'admin/@@Classname@@Controller/edit/$1';
+$route['admin/@@module@@/edit/(:num)']['post'] = 'admin/@@Classname@@Controller/postEdit/$1';
+$route['admin/@@module@@/delete']['post'] = 'admin/@@Classname@@Controller/ajaxDelete';
+$route['admin/@@module@@/update']['post'] = 'admin/@@Classname@@Controller/ajaxUpdate';
