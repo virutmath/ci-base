@@ -16,3 +16,4 @@ Codeigniter startup project
 - Run `$ composer install`
 - Run `$ php vendor/kenjis/codeigniter-cli/install.php` for install kenjis project
 - In ci_instance.php, config your `system` folder
+- Run `$ php cli migrate` and `$ php cli seed`
